@@ -8,9 +8,28 @@ jobs:
       - checkout
       - run: apt update
       - run: apt install -y build-essential curl
-      - run: ./build-ffmpeg --build
+      - run: 
+        no_output_timeout: 120m
+        command: ./build-ffmpeg --build
+      - save_cache:
+          key: build-cache
+          paths:
+            - ffmpeg/
+  publish: 
+    docker:
+      - image: ubuntu
+    steps:
+      - checkout
+      - restore_cache:
+        keys:
+          - build-cache
+      - run: ls ffmpeg/
+
 
 workflows:
   build:
     jobs:
       - build
+      - publish:
+        requires:
+          - build
