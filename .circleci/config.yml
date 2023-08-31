@@ -10,6 +10,6 @@ jobs:
       - run: ./build-ffmpeg --build
 
 workflows:
-  build_and_test:
+  build:
     jobs:
       - build
