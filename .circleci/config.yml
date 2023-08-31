@@ -9,8 +9,8 @@ jobs:
       - run: apt update
       - run: apt install -y build-essential curl
       - run: 
-        no_output_timeout: 120m
-        command: ./build-ffmpeg --build
+          no_output_timeout: 120m
+          command: ./build-ffmpeg --build
       - save_cache:
           key: build-cache
           paths:
@@ -21,8 +21,8 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-        keys:
-          - build-cache
+          keys:
+            - build-cache
       - run: ls ffmpeg/
 
 
@@ -31,5 +31,5 @@ workflows:
     jobs:
       - build
       - publish:
-        requires:
-          - build
+          requires:
+            - build
