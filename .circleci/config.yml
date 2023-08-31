@@ -7,7 +7,7 @@ jobs:
     steps:
       - checkout
       - run: apt update
-      - run: yes | apt install build-essential curl
+      - run: apt install -y build-essential curl
       - run: ./build-ffmpeg --build
 
 workflows:
