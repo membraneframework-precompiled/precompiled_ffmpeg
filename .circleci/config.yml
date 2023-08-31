@@ -10,7 +10,7 @@ jobs:
       - run: apt install -y build-essential curl
       - run: 
           no_output_timeout: 120m
-          command: ./build-ffmpeg --build
+          command: export NUMJOBS=8 ./build-ffmpeg --build
       - save_cache:
           key: build-cache
           paths:
