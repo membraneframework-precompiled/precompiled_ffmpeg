@@ -6,6 +6,7 @@ jobs:
       - image: ubuntu
     steps:
       - checkout
+      - run: apt update
       - run: apt install build-essential curl
       - run: ./build-ffmpeg --build
 
