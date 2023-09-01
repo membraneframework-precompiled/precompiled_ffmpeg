@@ -51,6 +51,7 @@ jobs:
       - run: wget https://github.com/tcnksm/ghr/releases/download/v0.16.0/ghr_v0.16.0_linux_amd64.tar.gz
       - run: tar -xf ghr_v0.16.0_linux_amd64.tar.gz
       - run: cd ~/workspace
+      - run: ls -la
       - run: |
             for d in */ ; do
               tar -czvf "$d.tar.gz" "$d"
