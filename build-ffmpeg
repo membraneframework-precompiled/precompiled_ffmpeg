@@ -9,7 +9,7 @@ SCRIPT_VERSION=1.46
 CWD=$(pwd)
 PACKAGES="$CWD/packages"
 WORKSPACE="$CWD/workspace"
-CFLAGS="-I$WORKSPACE/include"
+CFLAGS="-fPIC -I$WORKSPACE/include"
 LDFLAGS="-L$WORKSPACE/lib"
 LDEXEFLAGS=""
 EXTRALIBS="-ldl -lpthread -lm -lz"
@@ -17,7 +17,7 @@ MACOS_M1=false
 CONFIGURE_OPTIONS=()
 NONFREE_AND_GPL=false
 LATEST=false
-MANPAGES=1
+MANPAGES=0
 CURRENT_PACKAGE_VERSION=0
 
 # Check for Apple Silicon
