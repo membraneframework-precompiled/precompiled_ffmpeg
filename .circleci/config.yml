@@ -1,25 +1,38 @@
 version: 2.1
 
 jobs:
-  build:
-    # docker:
-    #   - image: ubuntu
+  build_macos:
     macos:
       xcode: 14.0.1
     steps:
       - checkout
-      # - run: apt update
-      # - run: apt install -y build-essential curl
       - run: 
           no_output_timeout: 120m
           command: ./build-ffmpeg --build
           environment:
             NUMJOBS:
               8
-      - save_cache:
-          key: build-cache
-          paths:
-            - ffmpeg/
+      - store_artifacts:
+          path: ./artifacts
+
+  build_linux:
+    # docker:
+    #   - image: ubuntu
+    # steps:
+    #   - checkout
+    #   - run: apt update
+    #   - run: apt install -y build-essential curl
+    #   - run: 
+    #       no_output_timeout: 120m
+    #       command: ./build-ffmpeg --build
+    #       environment:
+    #         NUMJOBS:
+    #           8
+    #   - save_cache:
+    #       key: build-cache
+    #       paths:
+    #         - ffmpeg/
+
   publish: 
     docker:
       - image: ubuntu
@@ -28,13 +41,18 @@ jobs:
       - restore_cache:
           keys:
             - build-cache
-      - run: ls ffmpeg/
+      - run: wget https://github.com/tcnksm/ghr/releases/download/v0.16.0/ghr_v0.16.0_linux_amd64.tar.gz
+      - run: tar -xf ghr_v0.16.0_linux_amd64.tar.gz
+      - run: export PATH=$PATH:/`pwd`/ghr_v0.16.0_linux_amd64
+      - run: ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./artifacts/ 
 
 
 workflows:
   build:
     jobs:
-      - build
+      - build_macos
+      # - build_linux
       - publish:
           requires:
-            - build
+            - build_macos
+            # - build_linux
