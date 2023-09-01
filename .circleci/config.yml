@@ -45,7 +45,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
-      - run: ls -la ~
+      - run: ls -la ~/workspace/
       - run: apt update
       - run: apt install -y wget
       - run: wget https://github.com/tcnksm/ghr/releases/download/v0.16.0/ghr_v0.16.0_linux_amd64.tar.gz
