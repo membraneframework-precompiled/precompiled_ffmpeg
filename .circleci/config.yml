@@ -6,6 +6,7 @@ jobs:
       xcode: 14.0.1
     steps:
       - checkout
+      - run: pwd
       - run: mkdir -p workspace/artifacts/
       - run: touch workspace/artifacts/test.test
       # - run: 
