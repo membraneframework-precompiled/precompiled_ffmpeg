@@ -8,7 +8,7 @@ jobs:
       - checkout
       - run: pwd
       - run: mkdir -p workspace/artifacts/
-      - run: touch workspace/artifacts/test.test
+      - run: echo "hello" > workspace/artifacts/test.test
       # - run: 
       #     no_output_timeout: 120m
       #     command: ./build-ffmpeg --build
