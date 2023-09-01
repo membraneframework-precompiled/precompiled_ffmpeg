@@ -55,7 +55,7 @@ jobs:
             for d in */ ; do
               tar -czvf "$d.tar.gz" "~/workspace/$d"
               cp "$d.tar.gz" ~/artifacts
-            end
+            done
       - run: 
           command: ./ghr_v0.16.0_linux_amd64/ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ~/artifacts/ 
           environment:
