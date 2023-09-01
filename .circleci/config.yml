@@ -50,9 +50,8 @@ jobs:
       - run: apt install -y wget
       - run: wget https://github.com/tcnksm/ghr/releases/download/v0.16.0/ghr_v0.16.0_linux_amd64.tar.gz
       - run: tar -xf ghr_v0.16.0_linux_amd64.tar.gz
-      #- run: for each file in ~/workspace -> tar file, cp file.tar to ~/artifacts
       - run: |
-            for d in */ ; do
+            for d in */workspace ; do
               tar -czvf "$d.tar.gz" "~/workspace/$d"
               cp "$d.tar.gz" ~/artifacts
             done
