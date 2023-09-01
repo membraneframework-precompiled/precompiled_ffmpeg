@@ -16,8 +16,9 @@ jobs:
       #         8
 
       - persist_to_workspace:
-          root: workspace/artifacts
-          paths: [*]
+          root: ~/
+          paths:
+            - workspace/artifacts
 
   # build_linux:
     # docker:
