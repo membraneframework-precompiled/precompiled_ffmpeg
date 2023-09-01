@@ -2,8 +2,10 @@ version: 2.1
 
 jobs:
   build:
-    docker:
-      - image: ubuntu
+    # docker:
+    #   - image: ubuntu
+    macos:
+      xcode: 14.0.1
     steps:
       - checkout
       - run: apt update
