@@ -17,7 +17,7 @@ jobs:
       #         8
 
       - persist_to_workspace:
-          root: ~/
+          root: ~/project/
           paths:
             - workspace/artifacts
 
