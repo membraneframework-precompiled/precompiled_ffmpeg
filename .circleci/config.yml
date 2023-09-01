@@ -8,8 +8,8 @@ jobs:
       xcode: 14.0.1
     steps:
       - checkout
-      - run: apt update
-      - run: apt install -y build-essential curl
+      # - run: apt update
+      # - run: apt install -y build-essential curl
       - run: 
           no_output_timeout: 120m
           command: ./build-ffmpeg --build
