@@ -17,8 +17,9 @@ jobs:
 
       - persist_to_workspace:
           root: workspace/artifacts
+          paths: [/]
 
-  build_linux:
+  # build_linux:
     # docker:
     #   - image: ubuntu
     # steps:
