@@ -6,6 +6,9 @@ jobs:
       xcode: 14.0.1
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - workspace-cache
       - run: mkdir -p ~/project/workspace/$ARTIFACT_NAME
       - run: 
           no_output_timeout: 120m
@@ -15,7 +18,10 @@ jobs:
               8
             ARTIFACT_NAME:
               ffmpeg_macos
-
+      - save_cache:
+          key: workspace-cache
+          paths:
+            - ~/project/workspace/
       - persist_to_workspace:
           root: ~/project/
           paths:
