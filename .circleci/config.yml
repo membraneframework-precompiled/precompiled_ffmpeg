@@ -7,7 +7,6 @@ jobs:
     steps:
       - checkout
       - run: mkdir -p ~/project/workspace/$ARTIFACT_NAME
-      # - run: echo "hello" > ~/project/workspace/ffmpeg_macos/test.test
       - run: 
           no_output_timeout: 120m
           command: ./build-ffmpeg --build
@@ -22,23 +21,23 @@ jobs:
           paths:
             - workspace/ffmpeg_macos
 
-  # build_linux:
-    # docker:
-    #   - image: ubuntu
-    # steps:
-    #   - checkout
-    #   - run: apt update
-    #   - run: apt install -y build-essential curl
-    #   - run: 
-    #       no_output_timeout: 120m
-    #       command: ./build-ffmpeg --build
-    #       environment:
-    #         NUMJOBS:
-    #           8
-    #   - save_cache:
-    #       key: build-cache
-    #       paths:
-    #         - ffmpeg/
+  build_linux:
+    docker:
+      - image: ubuntu
+    steps:
+      - checkout
+      - run: apt update
+      - run: apt install -y build-essential curl
+      - run: 
+          no_output_timeout: 120m
+          command: ./build-ffmpeg --build
+          environment:
+            NUMJOBS:
+              8
+      - save_cache:
+          key: build-cache
+          paths:
+            - ffmpeg/
 
   publish: 
     docker:
@@ -71,7 +70,7 @@ workflows:
   build:
     jobs:
       - build_macos
-      # - build_linux
+      - build_linux
       - publish:
           requires:
             - build_macos

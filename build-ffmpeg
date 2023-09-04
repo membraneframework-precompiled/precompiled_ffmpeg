@@ -19,6 +19,7 @@ NONFREE_AND_GPL=false
 LATEST=false
 MANPAGES=0
 CURRENT_PACKAGE_VERSION=0
+export CXXFLAGS="$CXXFLAGS -fPIC"
 
 # Check for Apple Silicon
 if [[ ("$(uname -m)" == "arm64") && ("$OSTYPE" == "darwin"*) ]]; then
