@@ -6,8 +6,8 @@ jobs:
       xcode: 14.0.1
     steps:
       - checkout
-      - run: mkdir -p workspace/ffmpeg_macos
-      - run: echo "hello" > workspace/ffmpeg_macos/test.test
+      - run: mkdir -p ~/project/workspace/ffmpeg_macos
+      - run: echo "hello" > ~/project/workspace/ffmpeg_macos/test.test
       # - run: 
       #     no_output_timeout: 120m
       #     command: ./build-ffmpeg --build
@@ -46,18 +46,23 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
-      - run: ls -la
+      - run: mkdir /root/artifacts
       - run: |
-            for d in */ ; do
-              tar -czvf "$d.tar.gz" "$d"
-              cp "$d.tar.gz" ~/artifacts
+            directory=/root/workspace
+            for subdir in "$directory"/*; do
+              if [ -d "$subdir" ]; then  
+                subdir_name="$(basename "$subdir")"
+                tar -czvf "$subdir_name.tar.gz" -C "$directory" "$subdir_name"
+                mv "$subdir_name.tar.gz" /root/artifacts
+              fi
             done
       - run: apt update
+      - run: cd /root/
       - run: apt install -y wget
       - run: wget https://github.com/tcnksm/ghr/releases/download/v0.16.0/ghr_v0.16.0_linux_amd64.tar.gz
       - run: tar -xf ghr_v0.16.0_linux_amd64.tar.gz
       - run: 
-          command: ./ghr_v0.16.0_linux_amd64/ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ~/artifacts/ 
+          command: ./ghr_v0.16.0_linux_amd64/ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} /root/artifacts/ 
           environment:
             VERSION:
               version1
