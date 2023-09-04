@@ -6,16 +6,16 @@ jobs:
       xcode: 14.0.1
     steps:
       - checkout
-      - run: mkdir -p ~/project/workspace/ffmpeg_macos
-      - run: echo "hello" > ~/project/workspace/ffmpeg_macos/test.test
-      # - run: 
-      #     no_output_timeout: 120m
-      #     command: ./build-ffmpeg --build
-      #     environment:
-      #       NUMJOBS:
-      #         8
-      #       ARTIFACT_NAME:
-      #         ffmpeg_macos
+      - run: mkdir -p ~/project/workspace/$ARTIFACT_NAME
+      # - run: echo "hello" > ~/project/workspace/ffmpeg_macos/test.test
+      - run: 
+          no_output_timeout: 120m
+          command: ./build-ffmpeg --build
+          environment:
+            NUMJOBS:
+              8
+            ARTIFACT_NAME:
+              ffmpeg_macos
 
       - persist_to_workspace:
           root: ~/project/
