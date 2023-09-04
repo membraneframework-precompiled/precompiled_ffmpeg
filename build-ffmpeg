@@ -587,7 +587,7 @@ if build "libvpx" "1.13.0"; then
     sed "s/-Wl,--no-undefined -Wl,-soname/-Wl,-undefined,error -Wl,-install_name/g" build/make/Makefile.patched >build/make/Makefile
   fi
 
-  execute ./configure --prefix="${WORKSPACE}" --disable-unit-tests --disable-shared --disable-examples --as=yasm --enable-vp9-highbitdepth
+  execute ./configure --prefix="${WORKSPACE}" --disable-unit-tests --disable-shared --disable-examples --as=yasm --enable-vp9-highbitdepth --enable-pic
   execute make -j $MJOBS
   execute make install
 
@@ -955,7 +955,7 @@ download "https://github.com/FFmpeg/FFmpeg/archive/refs/heads/release/$FFMPEG_VE
   --prefix="${WORKSPACE}/${ARTIFACT_NAME}" \
   --extra-version="${EXTRA_VERSION}" \
   --disable-asm \
-  --enable-pic
+  #--enable-pic
 
 execute make -j $MJOBS
 execute make install
