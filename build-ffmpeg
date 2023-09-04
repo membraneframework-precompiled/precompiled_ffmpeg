@@ -20,7 +20,7 @@ LATEST=false
 MANPAGES=0
 CURRENT_PACKAGE_VERSION=0
 #export CXXFLAGS="$CXXFLAGS -fPIC"
-export LDFLAGS="-Wl,-Bsymbolic"
+#export LDFLAGS="-Wl,-Bsymbolic"
 
 # Check for Apple Silicon
 if [[ ("$(uname -m)" == "arm64") && ("$OSTYPE" == "darwin"*) ]]; then
