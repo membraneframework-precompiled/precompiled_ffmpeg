@@ -30,7 +30,7 @@ jobs:
       - persist_to_workspace:
           root: ~/project/
           paths:
-            - workspace/$ARTIFACT_NAME
+            - workspace/ffmpeg_macos
 
   build_linux:
     docker:
