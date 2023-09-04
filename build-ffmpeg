@@ -19,7 +19,8 @@ NONFREE_AND_GPL=false
 LATEST=false
 MANPAGES=0
 CURRENT_PACKAGE_VERSION=0
-export CXXFLAGS="$CXXFLAGS -fPIC"
+#export CXXFLAGS="$CXXFLAGS -fPIC"
+export LDFLAGS="-Wl,-Bsymbolic"
 
 # Check for Apple Silicon
 if [[ ("$(uname -m)" == "arm64") && ("$OSTYPE" == "darwin"*) ]]; then
@@ -953,7 +954,8 @@ download "https://github.com/FFmpeg/FFmpeg/archive/refs/heads/release/$FFMPEG_VE
   --pkg-config-flags="--static" \
   --prefix="${WORKSPACE}/${ARTIFACT_NAME}" \
   --extra-version="${EXTRA_VERSION}" \
-  --disable-asm
+  --disable-asm \
+  --enable-pic
 
 execute make -j $MJOBS
 execute make install
