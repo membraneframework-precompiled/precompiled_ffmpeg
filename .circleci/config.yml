@@ -9,6 +9,7 @@ jobs:
       - restore_cache:
           keys:
             - workspace-cache
+            - packages-cache
       - run: mkdir -p ~/project/workspace/$ARTIFACT_NAME
       - run: 
           no_output_timeout: 120m
@@ -19,13 +20,17 @@ jobs:
             ARTIFACT_NAME:
               ffmpeg_macos
       - save_cache:
+          key: packages-cache
+          paths:
+            - ~/project/packages/
+      - save_cache:
           key: workspace-cache
           paths:
             - ~/project/workspace/
       - persist_to_workspace:
           root: ~/project/
           paths:
-            - workspace/ffmpeg_macos
+            - workspace/$ARTIFACT_NAME
 
   build_linux:
     docker:
@@ -40,10 +45,6 @@ jobs:
           environment:
             NUMJOBS:
               8
-      - save_cache:
-          key: build-cache
-          paths:
-            - ffmpeg/
 
   publish: 
     docker:
