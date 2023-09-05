@@ -792,6 +792,7 @@ if build "libtheora" "1.1.1"; then
 
   build_done "libtheora" "1.1.1"
 fi
+
 CONFIGURE_OPTIONS+=("--enable-libtheora")
 
 if $NONFREE_AND_GPL; then
