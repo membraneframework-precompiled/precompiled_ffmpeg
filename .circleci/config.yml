@@ -8,10 +8,10 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - workspace-cache
+            - workspace-cache-macos-intel
       - restore_cache:
           keys:
-            - packages-cache
+            - packages-cache-macos-intel
       - run: mkdir -p ~/project/workspace/$ARTIFACT_NAME
       - run: 
           no_output_timeout: 120m
@@ -22,11 +22,11 @@ jobs:
             ARTIFACT_NAME:
               ffmpeg_macos_intel
       - save_cache:
-          key: packages-cache
+          key: packages-cache-macos-intel
           paths:
             - ~/project/packages/
       - save_cache:
-          key: workspace-cache
+          key: workspace-cache-macos-intel
           paths:
             - ~/project/workspace/
       - persist_to_workspace:
@@ -42,10 +42,10 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - workspace-cache
+            - workspace-cache-macos-arm
       - restore_cache:
           keys:
-            - packages-cache
+            - packages-cache-macos-arm
       - run: mkdir -p ~/project/workspace/$ARTIFACT_NAME
       - run: 
           no_output_timeout: 120m
@@ -56,11 +56,11 @@ jobs:
             ARTIFACT_NAME:
               ffmpeg_macos_arm
       - save_cache:
-          key: packages-cache
+          key: packages-cache-macos-arm
           paths:
             - ~/project/packages/
       - save_cache:
-          key: workspace-cache
+          key: workspace-cache-macos-arm
           paths:
             - ~/project/workspace/
       - persist_to_workspace:
