@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-  build_macos:
+  build_macos_intel:
     macos:
       xcode: 14.0.1
     steps:
@@ -20,7 +20,7 @@ jobs:
             NUMJOBS:
               8
             ARTIFACT_NAME:
-              ffmpeg_macos
+              ffmpeg_macos_intel
       - save_cache:
           key: packages-cache
           paths:
@@ -32,7 +32,41 @@ jobs:
       - persist_to_workspace:
           root: ~/project/
           paths:
-            - workspace/ffmpeg_macos
+            - workspace/ffmpeg_macos_intel
+
+  build_macos_arm:
+    macos:
+      xcode: 14.0.1
+      resource_class: macos.m1.large.gen1
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - workspace-cache
+      - restore_cache:
+          keys:
+            - packages-cache
+      - run: mkdir -p ~/project/workspace/$ARTIFACT_NAME
+      - run: 
+          no_output_timeout: 120m
+          command: ./build-ffmpeg --build
+          environment:
+            NUMJOBS:
+              8
+            ARTIFACT_NAME:
+              ffmpeg_macos_arm
+      - save_cache:
+          key: packages-cache
+          paths:
+            - ~/project/packages/
+      - save_cache:
+          key: workspace-cache
+          paths:
+            - ~/project/workspace/
+      - persist_to_workspace:
+          root: ~/project/
+          paths:
+            - workspace/ffmpeg_macos_arm
 
   build_linux:
     docker:
@@ -78,9 +112,11 @@ jobs:
 workflows:
   build:
     jobs:
-      - build_macos
+      - build_macos_intel
+      - build_macos_arm
       - build_linux
       - publish:
           requires:
-            - build_macos
+            - build_macos_intel
+            - build_macos_arm
             # - build_linux
