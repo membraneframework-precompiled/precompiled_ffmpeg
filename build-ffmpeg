@@ -851,7 +851,7 @@ fi
 
 if build "libsdl" "2.26.3"; then
   download "https://www.libsdl.org/release/SDL2-2.26.3.tar.gz"
-  execute ./configure --prefix="${WORKSPACE}" --disable-shared --enable-static
+  execute ./configure --prefix="${WORKSPACE}" --disable-shared --enable-static --with-pic
   execute make -j $MJOBS
   execute make install
 
