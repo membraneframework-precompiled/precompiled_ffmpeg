@@ -12,7 +12,6 @@ jobs:
       - restore_cache:
           keys:
             - packages-cache-macos-intel
-      - run: mkdir -p ~/project/workspace/$ARTIFACT_NAME
       - run: 
           no_output_timeout: 120m
           command: ./build-ffmpeg --build
@@ -46,7 +45,6 @@ jobs:
       - restore_cache:
           keys:
             - packages-cache-macos-arm
-      - run: mkdir -p ~/project/workspace/$ARTIFACT_NAME
       - run: 
           no_output_timeout: 120m
           command: ./build-ffmpeg --build
@@ -75,12 +73,32 @@ jobs:
       - checkout
       - run: apt update
       - run: apt install -y build-essential curl
+      - restore_cache:
+          keys:
+            - workspace-cache-linux
+      - restore_cache:
+          keys:
+            - packages-cache-linux
       - run: 
           no_output_timeout: 120m
           command: ./build-ffmpeg --build
           environment:
             NUMJOBS:
               8
+            ARTIFACT_NAME:
+              ffmpeg_linux
+      - save_cache:
+          key: packages-cache-linux
+          paths:
+            - ~/project/packages/
+      - save_cache:
+          key: workspace-cache-linux
+          paths:
+            - ~/project/workspace/
+      - persist_to_workspace:
+          root: ~/project/
+          paths:
+            - workspace/ffmpeg_linux 
 
   publish: 
     docker:
@@ -118,5 +136,5 @@ workflows:
       - publish:
           requires:
             - build_macos_intel
-            - build_macos_arm
-            # - build_linux
+            # - build_macos_arm
+            - build_linux
