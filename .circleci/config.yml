@@ -1,4 +1,6 @@
 version: 2.1
+orbs:
+  elixir: membraneframework/elixir@dev:f059a80129a175c0b4e2d520bb686ef202d8a65b
 
 jobs:
   build_macos_intel:
@@ -36,7 +38,7 @@ jobs:
   build_macos_arm:
     macos:
       xcode: 14.2.0 
-      resource_class: macos.m1.medium.gen1
+    resource_class: macos.m1.medium.gen1
     steps:
       - checkout
       - restore_cache:
@@ -100,41 +102,20 @@ jobs:
           paths:
             - workspace/ffmpeg_linux 
 
-  publish: 
-    docker:
-      - image: ubuntu
-    steps:
-      - attach_workspace:
-          at: ~/
-      - run: mkdir /root/artifacts
-      - run: |
-            directory=/root/workspace
-            for subdir in "$directory"/*; do
-              if [ -d "$subdir" ]; then  
-                subdir_name="$(basename "$subdir")"
-                tar -czvf "$subdir_name.tar.gz" -C "$directory" "$subdir_name"
-                mv "$subdir_name.tar.gz" /root/artifacts
-              fi
-            done
-      - run: apt update
-      - run: cd /root/
-      - run: apt install -y wget
-      - run: wget https://github.com/tcnksm/ghr/releases/download/v0.16.0/ghr_v0.16.0_linux_amd64.tar.gz
-      - run: tar -xf ghr_v0.16.0_linux_amd64.tar.gz
-      - run: 
-          command: ./ghr_v0.16.0_linux_amd64/ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} /root/artifacts/ 
-          environment:
-            VERSION:
-              version1
-
 workflows:
   build:
     jobs:
       - build_macos_intel
       - build_macos_arm
       - build_linux
-      - publish:
+      - elixir/publish_precompiled:
           requires:
             - build_macos_intel
-            # - build_macos_arm
+            - build_macos_arm
             - build_linux
+          version: << pipeline.git.tag >>
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /v.*/  
