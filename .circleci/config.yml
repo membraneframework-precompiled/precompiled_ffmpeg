@@ -133,7 +133,7 @@ workflows:
   precompile:
     jobs:
       - elixir/precompile_for_macos_intel: &parameters
-          package-name: portaudio
+          package-name: ffmpeg
           expected-version: << pipeline.git.tag >>
           filters:
             tags:
