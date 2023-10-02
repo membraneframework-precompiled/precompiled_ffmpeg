@@ -1,126 +1,155 @@
+# version: 2.1
+# orbs:
+#   elixir: membraneframework/elixir@dev:f059a80129a175c0b4e2d520bb686ef202d8a65b
+
+# jobs:
+#   build_macos_intel:
+#     macos:
+#       xcode: 14.0.1
+#     steps:
+#       - checkout
+#       - restore_cache:
+#           keys:
+#             - workspace-cache-macos-intel
+#       - restore_cache:
+#           keys:
+#             - packages-cache-macos-intel
+#       - run: 
+#           no_output_timeout: 120m
+#           command: ./build-ffmpeg --build
+#           environment:
+#             NUMJOBS:
+#               8
+#             ARTIFACT_NAME:
+#               ffmpeg_macos_intel
+#       - save_cache:
+#           key: packages-cache-macos-intel
+#           paths:
+#             - ~/project/packages/
+#       - save_cache:
+#           key: workspace-cache-macos-intel
+#           paths:
+#             - ~/project/workspace/
+#       - persist_to_workspace:
+#           root: ~/project/
+#           paths:
+#             - workspace/ffmpeg_macos_intel
+
+#   build_macos_arm:
+#     macos:
+#       xcode: 14.2.0 
+#     resource_class: macos.m1.medium.gen1
+#     steps:
+#       - checkout
+#       - restore_cache:
+#           keys:
+#             - workspace-cache-macos-arm
+#       - restore_cache:
+#           keys:
+#             - packages-cache-macos-arm
+#       - run: 
+#           no_output_timeout: 120m
+#           command: ./build-ffmpeg --build
+#           environment:
+#             NUMJOBS:
+#               8
+#             ARTIFACT_NAME:
+#               ffmpeg_macos_arm
+#       - save_cache:
+#           key: packages-cache-macos-arm
+#           paths:
+#             - ~/project/packages/
+#       - save_cache:
+#           key: workspace-cache-macos-arm
+#           paths:
+#             - ~/project/workspace/
+#       - persist_to_workspace:
+#           root: ~/project/
+#           paths:
+#             - workspace/ffmpeg_macos_arm
+
+#   build_linux:
+#     docker:
+#       - image: ubuntu
+#     steps:
+#       - checkout
+#       - run: apt update
+#       - run: apt install -y build-essential curl
+#       - restore_cache:
+#           keys:
+#             - workspace-cache-linux
+#       - restore_cache:
+#           keys:
+#             - packages-cache-linux
+#       - run: 
+#           no_output_timeout: 120m
+#           command: ./build-ffmpeg --build
+#           environment:
+#             NUMJOBS:
+#               8
+#             ARTIFACT_NAME:
+#               ffmpeg_linux
+#       - save_cache:
+#           key: packages-cache-linux
+#           paths:
+#             - ~/project/packages/
+#       - save_cache:
+#           key: workspace-cache-linux
+#           paths:
+#             - ~/project/workspace/
+#       - persist_to_workspace:
+#           root: ~/project/
+#           paths:
+#             - workspace/ffmpeg_linux 
+
+# workflows:
+#   build:
+#     jobs:
+#       - build_macos_intel: &filters
+#           filters:
+#             tags:
+#               only: /v.*/
+#       - build_macos_arm:
+#           <<: *filters
+#       - build_linux:
+#           <<: *filters
+#       - elixir/publish_precompiled:
+#           requires:
+#             - build_macos_intel
+#             - build_macos_arm
+#             - build_linux
+#           version: << pipeline.git.tag >>
+#           filters:
+#             branches:
+#               ignore: /.*/
+#             tags:
+#               only: /v.*/  
+
 version: 2.1
 orbs:
   elixir: membraneframework/elixir@dev:f059a80129a175c0b4e2d520bb686ef202d8a65b
 
-jobs:
-  build_macos_intel:
-    macos:
-      xcode: 14.0.1
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - workspace-cache-macos-intel
-      - restore_cache:
-          keys:
-            - packages-cache-macos-intel
-      - run: 
-          no_output_timeout: 120m
-          command: ./build-ffmpeg --build
-          environment:
-            NUMJOBS:
-              8
-            ARTIFACT_NAME:
-              ffmpeg_macos_intel
-      - save_cache:
-          key: packages-cache-macos-intel
-          paths:
-            - ~/project/packages/
-      - save_cache:
-          key: workspace-cache-macos-intel
-          paths:
-            - ~/project/workspace/
-      - persist_to_workspace:
-          root: ~/project/
-          paths:
-            - workspace/ffmpeg_macos_intel
-
-  build_macos_arm:
-    macos:
-      xcode: 14.2.0 
-    resource_class: macos.m1.medium.gen1
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - workspace-cache-macos-arm
-      - restore_cache:
-          keys:
-            - packages-cache-macos-arm
-      - run: 
-          no_output_timeout: 120m
-          command: ./build-ffmpeg --build
-          environment:
-            NUMJOBS:
-              8
-            ARTIFACT_NAME:
-              ffmpeg_macos_arm
-      - save_cache:
-          key: packages-cache-macos-arm
-          paths:
-            - ~/project/packages/
-      - save_cache:
-          key: workspace-cache-macos-arm
-          paths:
-            - ~/project/workspace/
-      - persist_to_workspace:
-          root: ~/project/
-          paths:
-            - workspace/ffmpeg_macos_arm
-
-  build_linux:
-    docker:
-      - image: ubuntu
-    steps:
-      - checkout
-      - run: apt update
-      - run: apt install -y build-essential curl
-      - restore_cache:
-          keys:
-            - workspace-cache-linux
-      - restore_cache:
-          keys:
-            - packages-cache-linux
-      - run: 
-          no_output_timeout: 120m
-          command: ./build-ffmpeg --build
-          environment:
-            NUMJOBS:
-              8
-            ARTIFACT_NAME:
-              ffmpeg_linux
-      - save_cache:
-          key: packages-cache-linux
-          paths:
-            - ~/project/packages/
-      - save_cache:
-          key: workspace-cache-linux
-          paths:
-            - ~/project/workspace/
-      - persist_to_workspace:
-          root: ~/project/
-          paths:
-            - workspace/ffmpeg_linux 
-
 workflows:
-  build:
+  precompile:
     jobs:
-      - build_macos_intel: &filters
+      - elixir/precompile_for_macos_intel: &parameters
+          package-name: portaudio
+          expected-version: << pipeline.git.tag >>
           filters:
             tags:
               only: /v.*/
-      - build_macos_arm:
-          <<: *filters
-      - build_linux:
-          <<: *filters
+      - elixir/precompile_for_macos_arm:
+          <<: *parameters
+      - elixir/precompile_for_linux:
+          <<: *parameters
       - elixir/publish_precompiled:
           requires:
-            - build_macos_intel
-            - build_macos_arm
-            - build_linux
+            - elixir/precompile_for_macos_arm
+            - elixir/precompile_for_macos_intel
+            - elixir/precompile_for_linux
           version: << pipeline.git.tag >>
           filters:
             branches:
               ignore: /.*/
             tags:
-              only: /v.*/  
+              only: /v.*/
