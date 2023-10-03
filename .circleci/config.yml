@@ -14,7 +14,7 @@
 #       - restore_cache:
 #           keys:
 #             - packages-cache-macos-intel
-#       - run: 
+#       - run:
 #           no_output_timeout: 120m
 #           command: ./build-ffmpeg --build
 #           environment:
@@ -37,7 +37,7 @@
 
 #   build_macos_arm:
 #     macos:
-#       xcode: 14.2.0 
+#       xcode: 14.2.0
 #     resource_class: macos.m1.medium.gen1
 #     steps:
 #       - checkout
@@ -47,7 +47,7 @@
 #       - restore_cache:
 #           keys:
 #             - packages-cache-macos-arm
-#       - run: 
+#       - run:
 #           no_output_timeout: 120m
 #           command: ./build-ffmpeg --build
 #           environment:
@@ -81,7 +81,7 @@
 #       - restore_cache:
 #           keys:
 #             - packages-cache-linux
-#       - run: 
+#       - run:
 #           no_output_timeout: 120m
 #           command: ./build-ffmpeg --build
 #           environment:
@@ -100,7 +100,7 @@
 #       - persist_to_workspace:
 #           root: ~/project/
 #           paths:
-#             - workspace/ffmpeg_linux 
+#             - workspace/ffmpeg_linux
 
 # workflows:
 #   build:
@@ -123,11 +123,11 @@
 #             branches:
 #               ignore: /.*/
 #             tags:
-#               only: /v.*/  
+#               only: /v.*/
 
 version: 2.1
 orbs:
-  elixir: membraneframework/elixir@dev:f059a80129a175c0b4e2d520bb686ef202d8a65b
+  elixir: membraneframework/elixir@dev:f196d8f4809429df291e0a1634e4b9b870626d8e
 
 workflows:
   precompile:
@@ -136,6 +136,8 @@ workflows:
           package-name: ffmpeg
           expected-version: << pipeline.git.tag >>
           filters:
+            branches:
+              ignore: /.*/
             tags:
               only: /v.*/
       - elixir/precompile_for_macos_arm:
