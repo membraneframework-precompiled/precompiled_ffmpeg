@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  elixir: membraneframework/elixir@1.5
+  elixir: membraneframework/elixir@1.5.7
 
 workflows:
   precompile:
@@ -29,4 +29,5 @@ workflows:
               ignore: /.*/
             tags:
               only: /v.*/
+
 
