@@ -6,7 +6,7 @@ workflows:
   precompile:
     jobs:
       - elixir/precompile_for_macos_arm: &parameters
-          package-name: ffmpeg
+          package-name: ffmpeg@6
           expected-version: << pipeline.git.tag >>
           filters:
             branches:
